@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <termios.h>
+#include <unistd.h>
 
 #define MAXRAM 300
 
@@ -6,11 +9,12 @@ int stack[100];
 unsigned int SP = 0; 
 unsigned int IP = 0;
 int ram[MAXRAM];
+struct termios oldtio, newtio;
 
 int pop() {
   if( SP == 0 ) {
     // TODO handle this error somehow
-    printf("stack underflow!\n");
+    perror("stack underflow!");
     return 0;
   }
   int tos = stack[SP];
@@ -21,7 +25,7 @@ int pop() {
 void push( int x) {
   if( SP >= 100) {
     // TODO handle this error somehow
-    printf("stack overflow!\n");
+    perror("stack overflow!");
     return;
   }
   SP = SP + 1;
@@ -39,12 +43,54 @@ void setIP( unsigned int x) {
   return;
 }
 
+void loadRamFromFile() {
+  // from: https://www.tutorialspoint.com/c_standard_library/c_function_fgets.htm
+  FILE *fp;
+  char str[60];
+  int index;
 
-int main( int argc, char *argv) {
+  fp = fopen("file.txt", "r");
+  if( fp == NULL) {
+    // TODO do something with this error
+    perror("Error opening file");
+    return;
+  }
+
+  index = 0;
+  while( index < MAXRAM ) {
+    if( fgets( str, 60, fp) != NULL) {
+      ram[index] = atoi( str);
+    }
+    index += 1;
+  }
+
+  fclose(fp);
+}
+
+void setupTerminal() {
+  // largely from pforth pf_io_posix.c
+  tcgetattr(STDIN_FILENO, &oldtio);
+  tcgetattr(STDIN_FILENO, &newtio);
+  newtio.c_lflag &= ~( ECHO | ECHONL | ECHOCTL | ICANON );
+  newtio.c_cc[VTIME] = 0;
+  newtio.c_cc[VMIN] = 1;
+  if( tcsetattr(STDIN_FILENO, TCSANOW, &newtio) < 0 ) {
+    perror("error setting terminal");
+  }
+}
+
+void resetTerminal() {
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldtio);
+}
+
+int main( int argc, char *argv[]) {
   unsigned int cmd;
   unsigned int retCode;
   char ch;
   int a, b, c;
+  IP = -1;
+  loadRamFromFile();
+  setupTerminal();
   do {
     cmd = getNextByte();
     switch( cmd) {
@@ -55,12 +101,12 @@ int main( int argc, char *argv) {
       case 0x01:
         // read char from input and put on stack
         ch = getchar();
-        push(c);
+        push(ch);
         break;
       case 0x02:
         // pop char from stack and put into output
         ch = pop();
-        putchar(c);
+        putchar(ch);
         break;
       case 0x03:
         // subtract and branch if negative. hey now we're turing complete right?
@@ -81,5 +127,6 @@ int main( int argc, char *argv) {
     }
   } while( cmd != 0x00);
 
+  resetTerminal();
   return retCode;
 }
