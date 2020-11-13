@@ -120,6 +120,31 @@ int main( int argc, char *argv[]) {
           setIP(c);
         }
         break;
+      case 0x04:
+        // store a value in memory
+        a = pop(); // location
+        b = pop(); // value
+        ram[a] = b;
+        break;
+      case 0x05:
+        // read value from memory
+        a = pop(); // location
+        push( ram[a]);
+        break;
+      case 0x06:
+        // subtract
+        a = pop();
+        b = pop();
+        push( a-b);
+        break;
+      case 0x07:
+        // if TOS is negative, set IP to the next value in the stack
+        a = pop(); // condition
+        b = pop(); // location
+        if( a < 0) {
+          IP = b;
+        }
+        break;
       default:
         printf("unrecognized opcode %d\n", cmd);
         retCode = -1;
