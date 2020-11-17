@@ -138,12 +138,23 @@ int main( int argc, char *argv[]) {
         push( a-b);
         break;
       case 0x07:
+        // add
+        a = pop();
+        b = pop();
+        push( a+b);
+        break;
+      case 0x08:
         // if TOS is negative, set IP to the next value in the stack
         a = pop(); // condition
         b = pop(); // location
         if( a < 0) {
           IP = b;
         }
+        break;
+      case 0x09:
+        // immediate value - push the location after where IP is pointing on to the stack
+        IP += 1; // so this is a two-location operand
+        push( ram[IP]);
         break;
       default:
         printf("unrecognized opcode %d\n", cmd);
