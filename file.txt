@@ -1,6 +1,23 @@
-1
-1
-1
-2
-2
-2
+9    # 0:
+10   # 1: push 10
+9    # 2:
+100  # 3: push 100
+4    # 4: store 10 to @100
+9
+65   # push 65
+2    # print char 65
+9
+100  # push 100
+5    # read @100
+9
+1    # push 1
+6    # decrement what was read from @100
+9
+100  # push 100
+4    # store counter value in 100
+9
+4    # push top of loop
+9
+100
+5    # pop @100
+8    # if TOS<0, goto top of loop
