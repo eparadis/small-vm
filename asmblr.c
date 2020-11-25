@@ -10,6 +10,12 @@ void parseFile() {
   int line_number = 1;
   char *whitespace = " \t\r\n";
   char *token;
+  char *words[] = {
+    "halt", "get", "print", "fakesbn",
+    "store", "read", "sub", "add",
+    "jlz"
+  };
+  int i;
 
   fp = fopen("asm.txt", "r");
   if( fp == NULL) {
@@ -18,7 +24,7 @@ void parseFile() {
   }
 
   while( fgets( line, LINE_MAX, fp) != NULL) {
-    printf("%d: ", line_number);
+    // printf("%d: ", line_number);
     
     token = strtok(line, whitespace);
 
@@ -32,14 +38,23 @@ void parseFile() {
         printf("address: %s ", token);
       } else if( strpbrk( token, "0123456789") == token) {
         // the first character is a digit
-        printf("number: %s ", token);
+        printf("%s ", token);
+      } else if ( strcmp( token, "push") == 0) {
+        // currently the only multibyte opcode
+        printf("09 ");
       } else {
-        printf("word: %s ", token);
+        //printf("word: %s ", token);
+        for( i=0; i<9; i+=1) {
+          if( strcmp(token, words[i]) == 0) {
+            printf("%d ", i);
+            i=9999;
+          }
+        }
       }
       token = strtok(NULL, whitespace);
     }
   
-    printf("\n");
+    //printf("\n");
     line_number += 1;
   }
 
