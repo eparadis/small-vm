@@ -5,6 +5,7 @@
 #include <string.h>
 
 #define MAXRAM 300
+#define LINE_MAX 255
 
 int stack[100];
 unsigned int SP = 0; 
@@ -47,9 +48,11 @@ void setIP( unsigned int x) {
 void loadRamFromFile() {
   // from: https://www.tutorialspoint.com/c_standard_library/c_function_fgets.htm
   FILE *fp;
-  char str[60];
-  char *p_str;
+  char line[LINE_MAX];
+  char *p_token;
   int index;
+  char *token;
+  char *whitespace = " \t\r\n";
 
   fp = fopen("file.txt", "r");
   if( fp == NULL) {
@@ -59,13 +62,27 @@ void loadRamFromFile() {
   }
 
   index = 0;
-  while( index < MAXRAM ) {
-    if( fgets( str, 60, fp) != NULL) {
-      p_str = str;
-      ram[index] = atoi( strsep(&p_str, " \t\r\n"));
+  //while( index < MAXRAM ) {
+  while( fgets( line, LINE_MAX, fp) != NULL) {
+      token = strtok(line, whitespace);
+
+      // ignore anything on a line after a #
+      while( token != NULL && strcmp(token, "#")) {
+        if( strpbrk( token, "-0123456789") == token) {
+          // the first char is a digit or a negative sign
+          p_token = token;
+          ram[index] = atoi( token);
+          index += 1;
+        } else {
+          perror("parse error");
+        }
+        if( index > MAXRAM) {
+          perror("ram file too large to fit into VM ram");
+          break;
+        }
+        token = strtok( NULL, whitespace);
+      }
     }
-    index += 1;
-  }
 
   fclose(fp);
 }
