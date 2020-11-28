@@ -10,10 +10,13 @@ void addLabel( char *label, int loc) {
 void addAddress( char *label, int loc) {
 }
 
+int getAddress( char *label) {
+  return -999;
+}
+
 void parseFile() {
   FILE *fp;
   char line[LINE_MAX];
-  int line_number = 1;
   char *whitespace = " \t\r\n";
   char *token;
   char *words[] = {
@@ -30,6 +33,30 @@ void parseFile() {
     return;
   }
 
+  printf("first pass\n");
+  location = 0;
+  while( fgets( line, LINE_MAX, fp) != NULL) {
+    token = strtok(line, whitespace);
+    while( token != NULL && strcmp(token, "#")) {
+      if( strncmp(token, ":", 1) == 0) {
+        // label
+        printf("found label: %s \n", token);
+        addLabel( token, location);
+      } else if( strncmp( token, "@", 1) == 0) {
+        // address reference
+        // printf("address: %s ", token);
+        addAddress(token, location);
+        location += 1;
+      } else {
+        // opcode, number, or some unknown thing
+        location += 1;
+      }
+      token = strtok(NULL, whitespace);
+    }
+  }
+
+  printf("second pass\n");
+  rewind(fp);
   location = 0;
   while( fgets( line, LINE_MAX, fp) != NULL) {
     // printf("%d: ", line_number);
@@ -38,14 +65,10 @@ void parseFile() {
 
     // ignore anything after a #
     while( token != NULL && strcmp(token, "#")) {
-      if( strncmp(token, ":", 1) == 0) {
-        // label
-        // printf("label: %s ", token);
-        addLabel( token, location);
-      } else if( strncmp( token, "@", 1) == 0) {
+      if( strncmp( token, "@", 1) == 0) {
         // address reference
         // printf("address: %s ", token);
-        addAddress(token, location);
+        printf("%d ", getAddress(token));
         location += 1;
       } else if( strpbrk( token, "-0123456789") == token) {
         // the first character is a digit or negative sign
@@ -64,12 +87,9 @@ void parseFile() {
             i=9999;
           }
         }
-        location += 1;
       }
       token = strtok(NULL, whitespace);
     }
-  
-    line_number += 1;
   }
 
   printf("\n");
