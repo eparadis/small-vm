@@ -37,9 +37,9 @@ push 1
 sub
 push 100
 store
-# push @topofloop
+push @topofloop
 #      ^- unsupported, so we do it manually -v
-push 4 # a quirk in the VM is that it increments the IP early, so we use "4" to jump and start at location 5 (zero-based)
+# push 4 # a quirk in the VM is that it increments the IP early, so we use "4" to jump and start at location 5 (zero-based)
 push 100
 read
 jlz

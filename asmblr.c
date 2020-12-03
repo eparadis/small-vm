@@ -4,13 +4,31 @@
 
 #define LINE_MAX 255
 
+char *labels[10];
+int locs[10];
+int storedLabels = 0;
 void addLabel( char *label, int loc) {
-}
-
-void addAddress( char *label, int loc) {
+  labels[storedLabels] = malloc(strlen(label));
+  strcpy(labels[storedLabels], label);
+  labels[storedLabels][0] = '@'; // make it easier do search later
+  locs[storedLabels] = loc - 1; // VM quirk means subtract one
+  storedLabels++;
+  if( storedLabels > 10) {
+    perror("too many labels");
+    // exit() or something
+  }
 }
 
 int getAddress( char *label) {
+  int i = 0;
+  while( i<storedLabels) {
+    if( strcmp(label, labels[i]) == 0) {
+      return locs[i];
+    }
+    i += 1;
+  }
+  perror("label not found");
+  printf("label: %s\n", label);
   return -999;
 }
 
@@ -42,15 +60,15 @@ void parseFile() {
         // label
         printf("found label: %s \n", token);
         addLabel( token, location);
-      } else if( strncmp( token, "@", 1) == 0) {
-        // address reference
-        // printf("address: %s ", token);
-        addAddress(token, location);
-        location += 1;
       } else {
         // opcode, number, or some unknown thing
         location += 1;
       }
+      // other things we could find and note:
+      // - math expressoins to evalutate
+      // - macros to expand
+      // - potential optimizations
+      // - locations that we use address references
       token = strtok(NULL, whitespace);
     }
   }
