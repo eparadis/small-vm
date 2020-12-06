@@ -1,13 +1,19 @@
 #!/bin/sh
 
-# build the assembler
-gcc -o bar asmblr.c
+CCARGS='-Wall -Werror'
+
+# build the assembler if needed
+if [[ asmblr.c -nt bar ]]; then 
+  gcc $CCARGS -o bar asmblr.c
+fi
 
 # run the test file
 ./bar asm.txt > temp.txt
 
-# build the vm
-gcc -o foo main.c
+# build the vm if needed
+if [[ main.c -nt foo ]]; then 
+  gcc $CCARGS -o foo main.c
+fi
 
 # run the vm
 ./foo temp.txt
