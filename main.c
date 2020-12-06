@@ -49,12 +49,15 @@ void loadRamFromFile(char *filename) {
   // from: https://www.tutorialspoint.com/c_standard_library/c_function_fgets.htm
   FILE *fp;
   char line[LINE_MAX];
-  char *p_token;
   int index;
   char *token;
   char *whitespace = " \t\r\n";
 
-  fp = fopen(filename, "r");
+  if( strcmp(filename, "-") == 0 ) {
+    fp = stdin;
+  } else {
+    fp = fopen(filename, "r");
+  }
   if( fp == NULL) {
     // TODO do something with this error
     perror("Error opening file");
@@ -70,7 +73,6 @@ void loadRamFromFile(char *filename) {
       while( token != NULL && strcmp(token, "#")) {
         if( strpbrk( token, "-0123456789") == token) {
           // the first char is a digit or a negative sign
-          p_token = token;
           ram[index] = atoi( token);
           index += 1;
         } else {
@@ -114,7 +116,9 @@ int main( int argc, char *argv[]) {
   }
   IP = -1;
   loadRamFromFile(argv[1]);
-  setupTerminal();
+  if( strcmp(argv[1], "-") != 0) {
+    setupTerminal();
+  }
   do {
     cmd = getNextByte();
     switch( cmd) {
@@ -185,6 +189,8 @@ int main( int argc, char *argv[]) {
     }
   } while( cmd != 0x00);
 
-  resetTerminal();
+  if( strcmp(argv[1], "-") != 0) {
+    resetTerminal();
+  }
   return retCode;
 }
