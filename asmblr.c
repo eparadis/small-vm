@@ -32,7 +32,7 @@ int getAddress( char *label) {
   return -999;
 }
 
-void parseFile() {
+void parseFile(char *filename) {
   FILE *fp;
   char line[LINE_MAX];
   char *whitespace = " \t\r\n";
@@ -45,7 +45,7 @@ void parseFile() {
   int i;
   int location;
 
-  fp = fopen("asm.txt", "r");
+  fp = fopen(filename, "r");
   if( fp == NULL) {
     perror("Error opening file");
     return;
@@ -115,6 +115,9 @@ void parseFile() {
 }
 
 int main( int argc, char *argv[]) {
-  parseFile();
+  if( argc < 2) {
+    printf("usage:\n%s filename\n", argv[0]);
+  }
+  parseFile(argv[1]);
   return 0;
 }
