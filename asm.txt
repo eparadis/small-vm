@@ -30,7 +30,7 @@ push 100
 store
 :topofloop
 push 65
-print
+emit
 push 100
 read
 push 1
@@ -47,7 +47,7 @@ jlz
 # this has a bunch of syntactical sugar I'm uncertain of
 # store 10 @100
 # :topofloop
-# print 65
+# emit 65
 # read @100
 # dec
 # store @100

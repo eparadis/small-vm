@@ -39,7 +39,7 @@ void parseFile(char *filename) {
   char *whitespace = " \t\r\n";
   char *token;
   char *words[] = {
-    "halt", "get", "print", "fakesbn",
+    "halt", "get", "emit", "fakesbn",
     "store", "read", "sub", "add",
     "jlz"
   };
