@@ -12,6 +12,7 @@ void addLabel( char *label, int loc) {
   strcpy(labels[storedLabels], label);
   labels[storedLabels][0] = '@'; // make it easier do search later
   locs[storedLabels] = loc - 1; // VM quirk means subtract one
+  printf("# label %s is %d\n", label, loc - 1);
   storedLabels++;
   if( storedLabels > 10) {
     perror("too many labels");
@@ -28,7 +29,7 @@ int getAddress( char *label) {
     i += 1;
   }
   perror("label not found");
-  printf("# label: %s\n", label);
+  printf("# unfound label: %s\n", label);
   return -999;
 }
 
