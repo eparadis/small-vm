@@ -28,7 +28,7 @@ int getAddress( char *label) {
     i += 1;
   }
   perror("label not found");
-  printf("label: %s\n", label);
+  printf("# label: %s\n", label);
   return -999;
 }
 
@@ -51,14 +51,14 @@ void parseFile(char *filename) {
     return;
   }
 
-  printf("first pass\n");
+  printf("# first pass\n");
   location = 0;
   while( fgets( line, LINE_MAX, fp) != NULL) {
     token = strtok(line, whitespace);
     while( token != NULL && strcmp(token, "#")) {
       if( strncmp(token, ":", 1) == 0) {
         // label
-        printf("found label: %s \n", token);
+        printf("# found label: %s \n", token);
         addLabel( token, location);
       } else {
         // opcode, number, or some unknown thing
@@ -73,7 +73,7 @@ void parseFile(char *filename) {
     }
   }
 
-  printf("second pass\n");
+  printf("# second pass\n");
   rewind(fp);
   location = 0;
   while( fgets( line, LINE_MAX, fp) != NULL) {
