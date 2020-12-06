@@ -12,5 +12,8 @@ Both support rest-of-line comments with `#`.
 
 # running
 `vim asm.txt`
-`./asmblr > file.txt`
-`./small-vm`
+`./asmblr asm.txt > file.txt`
+`./small-vm`file.txt
+
+# smoke test
+`./smoketest.sh` compiles and runs some examples
