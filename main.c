@@ -45,7 +45,7 @@ void setIP( unsigned int x) {
   return;
 }
 
-void loadRamFromFile() {
+void loadRamFromFile(char *filename) {
   // from: https://www.tutorialspoint.com/c_standard_library/c_function_fgets.htm
   FILE *fp;
   char line[LINE_MAX];
@@ -54,7 +54,7 @@ void loadRamFromFile() {
   char *token;
   char *whitespace = " \t\r\n";
 
-  fp = fopen("file.txt", "r");
+  fp = fopen(filename, "r");
   if( fp == NULL) {
     // TODO do something with this error
     perror("Error opening file");
@@ -108,8 +108,12 @@ int main( int argc, char *argv[]) {
   unsigned int retCode;
   char ch;
   int a, b, c;
+  if( argc < 2 ) {
+    printf("usage:\n%s filename\n", argv[0]);
+    return -1;
+  }
   IP = -1;
-  loadRamFromFile();
+  loadRamFromFile(argv[1]);
   setupTerminal();
   do {
     cmd = getNextByte();
