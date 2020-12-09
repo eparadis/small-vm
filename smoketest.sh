@@ -3,7 +3,7 @@
 CCARGS='-Wall -Werror'
 
 # build the assembler if needed
-if [[ asmblr.c -nt bar ]]; then 
+if test asmblr.c -nt bar ; then
   gcc $CCARGS -o bar asmblr.c
 fi
 
@@ -11,7 +11,7 @@ fi
 ./bar asm.txt > temp.txt
 
 # build the vm if needed
-if [[ main.c -nt foo ]]; then 
+if test main.c -nt foo ; then
   gcc $CCARGS -o foo main.c
 fi
 
