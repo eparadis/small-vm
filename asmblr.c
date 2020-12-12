@@ -41,7 +41,7 @@ void parseFile(char *filename) {
   char *words[] = {
     "halt", "get", "emit", "fakesbn",
     "store", "read", "sub", "add",
-    "jlz"
+    "jgz"
   };
   int i;
   int location;

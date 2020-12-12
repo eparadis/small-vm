@@ -16,7 +16,7 @@ struct termios oldtio, newtio;
 int pop() {
   if( SP == 0 ) {
     // TODO handle this error somehow
-    perror("stack underflow!");
+    printf("stack underflow at IP=%d\n", IP);
     return 0;
   }
   int tos = stack[SP];
