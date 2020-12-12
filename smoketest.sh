@@ -17,3 +17,6 @@ fi
 
 # run the vm
 ./foo temp.txt
+
+# compile and run the hello world
+./bar hello.asm | ./foo -
