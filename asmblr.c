@@ -11,8 +11,8 @@ void addLabel( char *label, int loc) {
   labels[storedLabels] = malloc(strlen(label));
   strcpy(labels[storedLabels], label);
   labels[storedLabels][0] = '@'; // make it easier do search later
-  locs[storedLabels] = loc - 1; // VM quirk means subtract one
-  printf("# label %s is %d\n", label, loc - 1);
+  locs[storedLabels] = loc;
+  printf("# label %s is %d\n", label, loc);
   storedLabels++;
   if( storedLabels > 10) {
     perror("too many labels");

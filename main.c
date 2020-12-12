@@ -35,8 +35,11 @@ void push( int x) {
   return;
 }
 
-int getNextByte() {
+void advanceIP() {
   IP = (IP + 1) % MAXRAM; // we wrap
+}
+
+int getNextByte() {
   return ram[IP];
 }
 
@@ -119,19 +122,23 @@ int main( int argc, char *argv[]) {
   if( strcmp(argv[1], "-") != 0) {
     setupTerminal();
   }
+  advanceIP();
   do {
     cmd = getNextByte();
     switch( cmd) {
       case 0x00: // ( -- ) halt
         retCode = 0;
+        advanceIP();
         break;
       case 0x01: // ( -- char ) read char from input and put on stack
         ch = getchar();
         push(ch);
+        advanceIP();
         break;
       case 0x02: // ( char -- ) pop char and put into output
         ch = pop();
         putchar(ch);
+        advanceIP();
         break;
       case 0x03: // ( c b a -- B ) B=b-a, IP=c if B<0
         // subtract and branch if negative. hey now we're turing complete right?
@@ -144,28 +151,33 @@ int main( int argc, char *argv[]) {
         if( b < 0) {
           setIP(c);
         }
+        advanceIP();
         break;
       case 0x04: // ( val loc -- ) store a value in memory
         a = pop(); // location
         b = pop(); // value
         ram[a] = b;
         //printf("store %d into %d\n", b, a); 
+        advanceIP();
         break;
       case 0x05: // ( loc -- val ) read value from memory
         a = pop(); // location
         push( ram[a]);
         //printf("load %d\n", a);
+        advanceIP();
         break;
       case 0x06: // ( b a -- c) c=b-a subtract
         a = pop();
         b = pop();
         push( b-a);
         //printf( "subtract %d - %d \n", b, a);
+        advanceIP();
         break;
       case 0x07: // ( b a -- c) c=a+b add
         a = pop();
         b = pop();
         push( a+b);
+        advanceIP();
         break;
       case 0x08: // ( loc cond -- ) IP=loc if cond>0
         // if TOS is positive, set IP to the next value in the stack
@@ -176,16 +188,19 @@ int main( int argc, char *argv[]) {
           //printf("%d is greater than 0; jumping to %d\n", a, b);
         } else {
           //printf("%d is <= 0", a);
+          advanceIP();
         }
         break;
       case 0x09: // ( -- x ) immediate value - push the location after where IP is pointing on to the stack
-        IP += 1; // so this is a two-location operand
+        advanceIP(); // so this is a two-location operand
         push( ram[IP]);
+        advanceIP();
         break;
       default:
         printf("unrecognized opcode %d at %d\n", cmd, IP);
         retCode = -1;
         cmd = 0;
+        advanceIP();
     }
   } while( cmd != 0x00);
 
