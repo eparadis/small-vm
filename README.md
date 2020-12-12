@@ -18,10 +18,10 @@ Both support rest-of-line comments with `#`.
 
 `./asmblr asm.txt > file.txt`
 
-`./small-vm`file.txt
+`./small-vm file.txt`
 
 # smoke test
 `./smoketest.sh` compiles and runs some examples
 
 # reading from `stdin`
-Use the filename `-` like `./small-vm -` to have the VM read from `stdin`.
+Use the filename `-` like `./small-vm -` to have the VM read from `stdin`. Using this you can assemble and run in a single line with `./asmblr asm.txt | ./small-vm -`. See `smoketest.sh` for an example.
