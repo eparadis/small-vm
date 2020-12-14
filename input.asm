@@ -12,10 +12,18 @@ push @char
 store
 
 # if the char is newline, jump to adding zero terminator
-# subtract 10 from value
-# jgz ie: jump to not10 if orig value was gt 10
-# subtract 9 from orig value
-# jgz ie: jump to is10 if orig value was gt 9 (and lte 10 from above)
+push @not10
+ push @char # subtract 10 from value
+ read
+ push 10
+ sub
+jgz  # jgz - jump to not10 if orig value was gt 10
+push @is10
+ push @char  # subtract 9 from orig value
+ read
+ push 9
+ sub
+jgz # jgz - jump to is10 if orig value was gt 9 (and lte 10 from above)
 
 :not10
 # put the char into the buffer
