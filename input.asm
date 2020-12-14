@@ -1,6 +1,12 @@
 # title: input a line
 
+# set indexptr to the start of the buffer
+push @buffer
+push @indexptr
+store
+
 # get a char
+:getchar
 get
 push @char
 store
@@ -17,26 +23,46 @@ push @char
 read
 push @indexptr
 read
+read
+store
 
 # increment buffer pointer
+push @indexptr
+read
+push 1
+add
+push @indexptr
+store
 
 # jump back to get another char
+push @getchar
+push 1
+jgz
 
 # add a zero terminator
 :is10
+push 0
+push @indexptr
+read
+store
 
 # push number of characters stored
+push @indexptr
+push @buffer
+sub
 
 # halt (this is where we'd return)
+halt
 
 # variable: char, where most recent input is stored
 :char
 0
 
-# variable: length
-
 # variable: index pointer
+:indexptr
+0
 
 # space reserved for the string buffer
 :buffer
-0
+0 0 0 0   0 0 0 0   0 0 0 0   0 0 0 0 # 15 characters and a null
+
