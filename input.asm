@@ -31,7 +31,6 @@ push @char
 read
 push @indexptr
 read
-read
 store
 
 # increment buffer pointer
@@ -72,5 +71,5 @@ halt
 
 # space reserved for the string buffer
 :buffer
-0 0 0 0   0 0 0 0   0 0 0 0   0 0 0 0 # 15 characters and a null
+-1 -1 -1 -1  -1 -1 -1 -1  -1 -1 -1 -1  -1 -1 -1 0 # 15 characters and a null
 
