@@ -162,7 +162,13 @@ int main( int argc, char *argv[]) {
         break;
       case 0x05: // ( loc -- val ) read value from memory
         a = pop(); // location
-        push( ram[a]);
+        if( a < 0 || a >= MAXRAM) {
+          printf("cannot push illegal address of %d\n", a);
+          retCode = -1;
+          cmd = 0;
+        } else {
+          push( ram[a]);
+        }
         //printf("load %d\n", a);
         advanceIP();
         break;
@@ -207,5 +213,14 @@ int main( int argc, char *argv[]) {
   if( strcmp(argv[1], "-") != 0) {
     resetTerminal();
   }
+
+  /* TODO add a flag to do this optionally
+  for(i=0; i < MAXRAM; i++ ) {
+    printf("%d ", ram[i]);
+    if( i % 20 == 19) {
+      printf("\n");
+    }
+  }
+  */
   return retCode;
 }
