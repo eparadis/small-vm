@@ -3,9 +3,10 @@
 #include <string.h>
 
 #define LINE_MAX 255
+#define LABELS_MAX 100
 
-char *labels[10];
-int locs[10];
+char *labels[LABELS_MAX];
+int locs[LABELS_MAX];
 int storedLabels = 0;
 void addLabel( char *label, int loc) {
   labels[storedLabels] = malloc(strlen(label));
@@ -14,9 +15,9 @@ void addLabel( char *label, int loc) {
   locs[storedLabels] = loc;
   printf("# label %s is %d\n", label, loc);
   storedLabels++;
-  if( storedLabels > 10) {
-    perror("too many labels");
-    // exit() or something
+  if( storedLabels > LABELS_MAX) {
+    printf("too many labels");
+    exit(-1);
   }
 }
 
