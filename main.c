@@ -27,7 +27,7 @@ int pop() {
 void push( int x) {
   if( SP >= 100) {
     // TODO handle this error somehow
-    perror("stack overflow!");
+    printf("stack overflow!\n");
     return;
   }
   SP = SP + 1;
@@ -79,10 +79,10 @@ void loadRamFromFile(char *filename) {
           ram[index] = atoi( token);
           index += 1;
         } else {
-          perror("parse error");
+          printf("parse error\n");
         }
         if( index > MAXRAM) {
-          perror("ram file too large to fit into VM ram");
+          printf("ram file too large to fit into VM ram\n");
           break;
         }
         token = strtok( NULL, whitespace);
