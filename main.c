@@ -100,7 +100,7 @@ void setupTerminal() {
   newtio.c_cc[VTIME] = 0;
   newtio.c_cc[VMIN] = 1;
   if( tcsetattr(STDIN_FILENO, TCSANOW, &newtio) < 0 ) {
-    perror("error setting terminal");
+    printf("error setting terminal");
   }
 }
 
