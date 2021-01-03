@@ -25,3 +25,8 @@ Both support rest-of-line comments with `#`.
 
 # reading from `stdin`
 Use the filename `-` like `./small-vm -` to have the VM read from `stdin`. Using this you can assemble and run in a single line with `./asmblr asm.txt | ./small-vm -`. See `smoketest.sh` for an example.
+
+# TODO
+- add macros to the assembler
+- proposal: implement a control (call/return) stack in VM
+- write a small interactive monitor to run in the VM
