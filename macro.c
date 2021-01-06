@@ -31,24 +31,22 @@ void addToMacro( char *token) {
   macros[storedMacros - 1] = tmp;
 }
 
-int secondPassProcess( char *line, int startingLoc);
-
 int expandMacro( char *name, int startingLocation) {
   // printf("# expanding macro '%s'\n", name);
-  int retval;
-  char *tmp;
+  int retval = 0;
   int count = 0;
   while( count < storedMacros) {
     if( strcmp( name, macro_names[count]) == 0) {
-      printf("# (macro: %s)%s\n", name,  macros[count]);
-      tmp = malloc( strlen(macros[count]) + 1 * sizeof( char));
-      if( tmp == NULL) {
-        perror( "could not malloc duplicate line to parse");
-        exit(-1);
-      }
-      strcpy( tmp, macros[count]);
-      retval = secondPassProcess( tmp, startingLocation);
-      free(tmp);
+      printf("# macro: %s\n", name);
+      printf("%s\n",  macros[count]);
+      // tmp = malloc( strlen(macros[count]) + 1 * sizeof( char));
+      // if( tmp == NULL) {
+      //   perror( "could not malloc duplicate line to parse");
+      //  exit(-1);
+      //}
+      // strcpy( tmp, macros[count]);
+      // retval = secondPassProcess( tmp, startingLocation);
+      // free(tmp);
       return retval; 
     }
     count ++;
@@ -135,7 +133,7 @@ int getAddress( char *label) {
   return -999;
 }
 
-int firstPassProcess( char *line, int startingLoc) {
+int firstPass( char *line, int startingLoc) {
   int location = startingLoc;
   char *whitespace = " \t\r\n";
   char *ctx;
@@ -150,61 +148,26 @@ int firstPassProcess( char *line, int startingLoc) {
       createMacro(token);
     } else if( insideMacroDef()) {
       addToMacro(token);
-    } else if( strncmp(token, ":", 1) == 0) {
-      // label
-      printf("# found label: %s \n", token);
-      addLabel( token, location);
     } else {
-      // opcode, number, or some unknown thing
       location += 1;
     }
-    // other things we could find and note:
-    // - math expressoins to evalutate
-    // - potential optimizations
-    // - locations that we use address references
     token = strtok_r(NULL, whitespace, &ctx);
   }
   return location;
 }
 
-int secondPassProcess( char *line, int startingLoc) {
-  int i;
+int secondPass( char *line, int startingLoc) {
   int location = startingLoc;
   char *whitespace = " \t\r\n";
-  char *words[] = {
-    "halt", "get", "emit", "fakesbn",
-    "store", "read", "sub", "add",
-    "jgz"
-  };
   char *ctx;
   char *token = strtok_r(line, whitespace, &ctx);
-  printf(" (%s) ", line);
   // ignore anything after a #
   while( token != NULL && strcmp(token, "#")) {
-    if( strncmp( token, "@", 1) == 0) {
-      // address reference
-      // printf("address: %s ", token);
-      printf("%d ", getAddress(token));
-      location += 1;
-    } else if( strpbrk( token, "-0123456789") == token) {
-      // the first character is a digit or negative sign
-      printf("%s ", token);
-      location += 1;
-    } else if ( strcmp( token, "push") == 0) {
-      // currently the only multibyte opcode
-      printf("09 ");
-      location += 1;
-    } else if( isMacro(token)) {
+    if( isMacro(token)) {
       location = expandMacro(token, location);
     } else {
-      //printf("word: %s ", token);
-      // the position in the array is the value of the opcode
-      for( i=0; i<9; i+=1) {
-        if( strcmp(token, words[i]) == 0) {
-          printf("%d ", i);
-          i=9999;
-        }
-      }
+      printf("%s ", token);
+      location += 1;
     }
     token = strtok_r(NULL, whitespace, &ctx);
   }
@@ -225,14 +188,14 @@ void parseFile(char *filename) {
   printf("# first pass\n");
   location = 0;
   while( fgets( line, LINE_MAX, fp) != NULL) {
-    location = firstPassProcess(line, location);
+    location = firstPass(line, location);
   }
 
   printf("# second pass\n");
   rewind(fp);
   location = 0;
   while( fgets( line, LINE_MAX, fp) != NULL) {
-    location = secondPassProcess(line, location);
+    location = secondPass(line, location);
   }
 
   printf("\n");
