@@ -34,6 +34,29 @@ int getAddress( char *label) {
   return -999;
 }
 
+int firstPass(char * line, int location) {
+  char *whitespace = " \t\r\n";
+  char *token = strtok(line, whitespace);
+  while( token != NULL && strcmp(token, "#")) {
+    if( strncmp(token, ":", 1) == 0) {
+      // label
+      printf("# found label: %s \n", token);
+      addLabel( token, location);
+    } else {
+      // opcode, number, or some unknown thing
+      location += 1;
+    }
+    // other things we could find and note:
+    // - math expressoins to evalutate
+    // - macros to expand
+    // - potential optimizations
+    // - locations that we use address references
+    token = strtok(NULL, whitespace);
+  }
+  return location;
+}
+
+
 void parseFile(char *filename) {
   FILE *fp;
   char line[LINE_MAX];
@@ -56,23 +79,7 @@ void parseFile(char *filename) {
   printf("# first pass\n");
   location = 0;
   while( fgets( line, LINE_MAX, fp) != NULL) {
-    token = strtok(line, whitespace);
-    while( token != NULL && strcmp(token, "#")) {
-      if( strncmp(token, ":", 1) == 0) {
-        // label
-        printf("# found label: %s \n", token);
-        addLabel( token, location);
-      } else {
-        // opcode, number, or some unknown thing
-        location += 1;
-      }
-      // other things we could find and note:
-      // - math expressoins to evalutate
-      // - macros to expand
-      // - potential optimizations
-      // - locations that we use address references
-      token = strtok(NULL, whitespace);
-    }
+    location = firstPass(line, location);
   }
 
   printf("# second pass\n");
