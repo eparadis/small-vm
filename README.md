@@ -1,6 +1,22 @@
 # small-vm
 A small VM idea while thinking about FORTH
 
+The main hypothesis of this project is:
+> Having a macroassembler and the ability to easily change the ISA it targets creates an overall simpler system.
+
+The secondary hypothesis is:
+> By having a macroassembler emulate "missing" opcodes in the ISA, I can have an iterative process to improve the ISA.
+
+The workflow proposal would be:
+1. write a minimal ISA
+2. write macros to fill in the gaps
+3. move the most-used macros to the ISA, remove unused ones, reimplement rarely-used opcodes as macros
+4. write higher level applications using the current set of macros
+5. iterate steps 3 and 4 until a some design goal is reached - minimal ISA, suitable code density, implementation complexity, etc
+6. implement the machine the VM models in hardware now that the ISA and architecture has settled
+7. use the software tools created to test the hardware implementation(s)
+8. use the higher level application(s) on the hardware implementation(s)
+
 # building
 `gcc -o small-vm main.c`
 
