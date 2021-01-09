@@ -156,16 +156,22 @@ int firstPass( char *line, int startingLoc) {
   return location;
 }
 
-int secondPass( char *line, int startingLoc) {
+int secondPass( char *line, int startingLoc, int *insideMacro) {
   int location = startingLoc;
   char *whitespace = " \t\r\n";
   char *ctx;
   char *token = strtok_r(line, whitespace, &ctx);
   // ignore anything after a #
   while( token != NULL && strcmp(token, "#")) {
-    if( isMacro(token)) {
+    if( strncmp(token, ".endmacro", 9) == 0) {
+      *insideMacro = 0;
+      printf("\n# leaving macro\n");
+    } else if( strncmp(token, ".addmacro", 9) == 0) {
+      *insideMacro = 1;
+      printf("\n# entering macro\n");
+    } else if( *insideMacro == 0 && isMacro(token)) {
       location = expandMacro(token, location);
-    } else {
+    } else if( *insideMacro == 0) {
       printf("%s ", token);
       location += 1;
     }
@@ -178,6 +184,7 @@ void parseFile(char *filename) {
   FILE *fp;
   char line[LINE_MAX];
   int location;
+  int insideMacro = 0;
 
   fp = fopen(filename, "r");
   if( fp == NULL) {
@@ -195,7 +202,7 @@ void parseFile(char *filename) {
   rewind(fp);
   location = 0;
   while( fgets( line, LINE_MAX, fp) != NULL) {
-    location = secondPass(line, location);
+    location = secondPass(line, location, &insideMacro);
   }
 
   printf("\n");
