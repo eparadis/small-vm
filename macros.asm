@@ -12,6 +12,8 @@ jump
 :end
 emit # should print 'B'
 emit # should print 'A'
+push 10
+emit # newline
 halt
 
 :target

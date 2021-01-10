@@ -20,3 +20,14 @@ fi
 
 # compile and run the hello world
 ./bar hello.asm | ./foo -
+
+# build the macro expander if needed
+if test macro.c -nt baz ; then
+  gcc $CCARGS -o baz macro.c
+fi
+
+# expand the example macro
+./baz macros.asm > temp2.txt
+
+# assemble and execute the result
+./bar temp2.txt | ./foo -
