@@ -1,15 +1,24 @@
 # library to deal with strings
 
-.addmacro puts # ( addr -- ) emits a null-terminated string at addr
+.addmacro call # ( addr -- ) pushes an address to return to on to the control stack and jumps to the address addr
+# TODO call impl
+.endmacro
+
+.addmacro return # ( -- ) pops the control stack and jumps to it
+# TODO return impl
+.endmacro
+
+.addmacro puts # ( addr -- ) emits a null-terminated string that starts at addr
 # this might be what is called a 'trampoline'
+# when macros support parameters, this could be 'puts @someString'
+# i need a way to jump back to this point, but because this is a macro, it will occur in many places. The obvious answer is a call stack
 push @_strlib_puts
-push 1
-jgz
-# TODO i need a way to jump back to this point, but because this is a macro, it will occur in my places. The obvous answer is a call stack
+call
 .endmacro
 
 .addmacro putd # ( val -- ) emits val as a decimal
 # TODO putd impl
+# https://stackoverflow.com/questions/13166064/how-do-i-print-an-integer-in-assembly-level-programming-without-printf-from-the
 .endmacro
 
 :_strlib_top
