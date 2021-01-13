@@ -202,6 +202,10 @@ int main( int argc, char *argv[]) {
         push( ram[IP]);
         advanceIP();
         break;
+      case 0x0A: // ( -- ip ) push IP
+        push( IP);
+        advanceIP();
+        break;
       default:
         printf("unrecognized opcode %d at %d\n", cmd, IP);
         retCode = -1;

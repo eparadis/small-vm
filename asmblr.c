@@ -61,7 +61,7 @@ int secondPass( char *line, int location) {
   char *words[] = {
     "halt", "get", "emit", "fakesbn",
     "store", "read", "sub", "add",
-    "jgz"
+    "jgz", "pip"
   };
   int i;
   char *token = strtok(line, whitespace);
