@@ -1,19 +1,39 @@
 # library to deal with strings
 
 .addmacro call # ( addr -- ) pushes an address to return to on to the control stack and jumps to the address addr
-# TODO call impl
 # increment stack pointer
+push @_strlib_SP
+read
+push 1
+add
+push @_strlib_SP
+store
 # push current IP
+pip # TODO this is a new opcode: ( -- ip )
 # add an offset to account for the following code
+push 10 # should point to right after the end of this macro expansion
+add
 # copy it to where the stack pointer points
+push @_strlib_SP
+store
 # jump to addr
+push 1
+jgz
 .endmacro
 
 .addmacro return # ( -- ) pops the control stack and jumps to it
-# TODO return impl
 # push whatever the stack pointer points to
+push @_strlib_SP
+read
+read
 # decrement the stack pointer
+push 1
+sub
+push @_strlib_SP
+store
 # jump to what we pushed earlier
+push 1
+jgz
 .endmacro
 
 .addmacro puts # ( addr -- ) emits a null-terminated string that starts at addr
