@@ -25,7 +25,7 @@ void addToMacro( char *token) {
   }
   tmp[0] = '\0'; // null terminator
   strcat( tmp, macros[storedMacros - 1]);
-  strcat( tmp, " ");
+  strcat( tmp, "\n");
   strcat( tmp, token);
   free(macros[storedMacros - 1]);
   macros[storedMacros - 1] = tmp;
@@ -172,7 +172,7 @@ int secondPass( char *line, int startingLoc, int *insideMacro) {
     } else if( *insideMacro == 0 && isMacro(token)) {
       location = expandMacro(token, location);
     } else if( *insideMacro == 0) {
-      printf("%s ", token);
+      printf("%s\n", token);
       location += 1;
     }
     token = strtok_r(NULL, whitespace, &ctx);
