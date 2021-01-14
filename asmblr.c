@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define LINE_MAX 255
+#define LINE_MAX 1023
 #define LABELS_MAX 100
 
 char *labels[LABELS_MAX];
