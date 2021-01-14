@@ -61,8 +61,9 @@ int secondPass( char *line, int location) {
   char *words[] = {
     "halt", "get", "emit", "fakesbn",
     "store", "read", "sub", "add",
-    "jgz", "pip"
+    "jgz", "push", "pip"
   };
+  int numWords = 11;
   int i;
   char *token = strtok(line, whitespace);
   // ignore anything after a #
@@ -70,11 +71,11 @@ int secondPass( char *line, int location) {
     if( strncmp( token, "@", 1) == 0) {
       // address reference
       // printf("address: %s ", token);
-      printf("%d ", getAddress(token));
+      printf("%d\n", getAddress(token));
       location += 1;
     } else if( strpbrk( token, "-0123456789") == token) {
       // the first character is a digit or negative sign
-      printf("%s ", token);
+      printf("%s\n", token);
       location += 1;
     } else if ( strcmp( token, "push") == 0) {
       // currently the only multibyte opcode
@@ -83,9 +84,10 @@ int secondPass( char *line, int location) {
     } else {
       //printf("word: %s ", token);
       // the position in the array is the value of the opcode
-      for( i=0; i<9; i+=1) {
+      for( i=0; i<numWords; i+=1) {
         if( strcmp(token, words[i]) == 0) {
-          printf("%d ", i);
+          // i should never equal 9 because push is special cased above
+          printf("%d\n", i);
           i=9999;
         }
       }
