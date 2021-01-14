@@ -81,17 +81,16 @@ push @_strlib_cs
 push @_strlib_SP
 store # store the address of the control stack into the stack pointer
 
-# push @_test_message
-# puts
-# halt
+push @_test_message
+puts
+push @_test_message
+puts
+push @_test_message
+puts
 
-push 66
-push @call_test
-call
 halt
 
 :_test_message
-10
 72
 101
 108
@@ -100,8 +99,3 @@ halt
 33
 10
 0
-
-:call_test # emit TOS with a newline
-emit
-push 10 emit
-return
