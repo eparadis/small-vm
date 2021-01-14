@@ -1,14 +1,8 @@
 *.swp
+
+# our binaries from smoketest.sh
 foo
 bar
-temp.txt
 baz
-temp2.txt
 
-# temp files for testing the strlib
-one
-two
-three
-four
-five
-six
+temp/

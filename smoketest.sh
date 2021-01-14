@@ -1,33 +1,36 @@
 #!/bin/sh
 
 CCARGS='-Wall -Werror'
+VMNAME='foo'
+ASMNAME='bar'
+MACRONAME='baz'
 
 # build the assembler if needed
-if test asmblr.c -nt bar ; then
-  gcc $CCARGS -o bar asmblr.c
+if test asmblr.c -nt $ASMNAME ; then
+  gcc $CCARGS -o $ASMNAME asmblr.c
 fi
 
 # run the test file
-./bar asm.txt > temp.txt
+./$ASMNAME tests/asm.txt > temp/temp.txt
 
 # build the vm if needed
-if test main.c -nt foo ; then
-  gcc $CCARGS -o foo main.c
+if test main.c -nt $VMNAME ; then
+  gcc $CCARGS -o $VMNAME main.c
 fi
 
 # run the vm
-./foo temp.txt
+./$VMNAME temp/temp.txt
 
 # compile and run the hello world
-./bar hello.asm | ./foo -
+./$ASMNAME tests/hello.asm | ./$VMNAME -
 
 # build the macro expander if needed
-if test macro.c -nt baz ; then
-  gcc $CCARGS -o baz macro.c
+if test macro.c -nt $MACRONAME ; then
+  gcc $CCARGS -o $MACRONAME macro.c
 fi
 
 # expand the example macro
-./baz macros.asm > temp2.txt
+./$MACRONAME tests/macros.asm > temp/temp2.txt
 
 # assemble and execute the result
-./bar temp2.txt | ./foo -
+./$ASMNAME temp/temp2.txt | ./$VMNAME -

@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
-cat strlib_macros.asm strlib.asm > one
-./baz one > two
-cat strlib_macros.asm two > three
-./baz three > four
-./bar four > five
-./foo five
+export DIR='temp/libtest'
+
+mkdir $DIR
+
+cat strlib_macros.asm strlib.asm > $DIR/one
+./baz $DIR/one > $DIR/two
+cat strlib_macros.asm $DIR/two > $DIR/three
+./baz $DIR/three > $DIR/four
+./bar $DIR/four > $DIR/five
+./foo $DIR/five
