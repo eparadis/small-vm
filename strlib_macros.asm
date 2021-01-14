@@ -4,19 +4,20 @@
 # increment stack pointer
 push @_strlib_SP # > addr SP_addr
 read             # > addr SP_val
-read             # > addr TOS
-push 1           # > addr TOS 1
-add              # > addr TOS+1
-push @_strlib_SP # > addr TOS+1 SP_addr
-store            # > addr  # and the SP is now pointing at the next address
+push 1           # > addr SP_val 1
+add              # > addr SP_val+1
+push @_strlib_SP # > addr SP_val+1 SP_addr
+store            # > addr  # and the SP is now pointing at the next address in the control stack
 # push current IP
-pip # this is a new opcode: ( -- ip )  # > addr [ip of here]
+pip # this is a new opcode: ( -- ip )  
+                 # > addr [ip of here]
 # add an offset to account for the following code
-push 10 # should point to right after the end of this macro expansion # > addr [ip of there] 10
-add              # > addr there+10
+push 11 # should point to right after the end of this macro expansion 
+                 # > addr [ip of there] 11
+add              # > addr there+11
 # copy it to where the stack pointer points
-push @_strlib_SP # > addr there+10 SP_addr
-read             # > addr there+10 SP_val
+push @_strlib_SP # > addr there+11 SP_addr
+read             # > addr there+11 SP_val
 store            # > addr  # and where SP points is there+10
 # jump to addr
 push 1           # > addr 1
