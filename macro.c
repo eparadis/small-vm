@@ -96,7 +96,7 @@ void endMacro() {
     printf("# attempting to end a macro definition when we're not in one!\n");
     return;
   }
-  printf("# ending macro definition\n");
+  printf("# end of macro definition\n\n");
   insideMacro = 0;
 }
 
