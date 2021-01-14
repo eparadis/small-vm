@@ -51,14 +51,15 @@ gcc -o macroprep macro.c
 ```
 
 # TODO
-- create a macro library of "missing" opcodes like various conditional jumps, call/return, indirect memory addressing, etc. These would be good candidates for adding to the VM to improve code density.
-- create a macro library of terminal IO: printing strings, inputting strings, printing number, inputting numbers, print hex, etc
+- create a macro library of "missing" opcodes like various conditional jumps, ~call/return~, indirect memory addressing, etc. These would be good candidates for adding to the VM to improve code density.
+- create a macro library of terminal IO: ~printing strings~, inputting strings, printing number, inputting numbers, print hex, etc
 - create a macro library of string operations useful for an interactive monitor: extracting tokens, splitting strings, searching strings, printing areas of memory, etc
+- improve the workflow when using macros that use other macros (will be almost all of them, most likely!)
 - write a small interactive monitor to run in the VM
 - write a small assembler to run in the VM
 - write a FORTH to run in the VM
 - proposal: implement a control (call/return) stack in VM
-- unify opcode definitions between VM and assembler so changing the ISA is simpler
+- unify opcode definitions between VM and assembler so changing the ISA is simpler _and less error-prone_ :(
 - unify the macro processor with the assembler
 - remove the need for temporary files (make the assembler single-pass, make an in-memory representation of the object file that can be operated on non-linearly, assume everything is defined before it is needed and do a lazy/lazier calculation on addresses, or ... etc)
 - do a better job of preserving comments from one step to the next. Maybe this is a flag?
