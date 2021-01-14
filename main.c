@@ -5,7 +5,7 @@
 #include <string.h>
 
 #define MAXRAM 300
-#define LINE_MAX 255
+#define LINE_MAX 1023 
 
 int stack[100];
 unsigned int SP = 0; 
