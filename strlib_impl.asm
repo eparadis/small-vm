@@ -7,6 +7,10 @@ jgz # jump over all the variables and impls to the init
 :_call_impl
 _call_impl   # so 'call_impl' is actually a macro, so we're just expanding it here at a specific address
 
+# --- return impl ---
+:_return_impl
+_return_impl # like call_impl, we're expanding this here and jumping to it from macros to save space
+
 # control stack
 :_strlib_cs
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0

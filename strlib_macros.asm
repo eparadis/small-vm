@@ -33,7 +33,13 @@ push 1           # > addr 1
 jgz              # > (empty) # and we jump to addr
 .endmacro
 
-.addmacro return # ( -- ) pops the control stack and jumps to it
+.addmacro return # ( -- ) jumps to a place that pops the control stack and jumps to it
+push @_return_impl
+push 1
+jgz
+.endmacro
+
+.addmacro _return_impl # ( -- ) pops the control stack and jumps to it
 # push whatever the stack pointer points to
 push @_strlib_SP # > SP_addr
 read             # > SP_val
