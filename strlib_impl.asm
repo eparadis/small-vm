@@ -1,4 +1,3 @@
-
 :_strlib_top
 push @_strlib_init
 push 1
@@ -81,21 +80,3 @@ push @_strlib_cs
 push @_strlib_SP
 store # store the address of the control stack into the stack pointer
 
-push @_test_message
-puts
-push @_test_message
-puts
-push @_test_message
-puts
-
-halt
-
-:_test_message
-72
-101
-108
-108
-111
-33
-10
-0
