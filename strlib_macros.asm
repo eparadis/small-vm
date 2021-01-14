@@ -1,13 +1,22 @@
 # library to deal with strings
 
-.addmacro call # ( addr -- ) pushes an address to return to on to the control stack and jumps to the address addr
+.addmacro call # ( addr -- ) pushes a return address to the stack and jumps somewhere that records that and jumps to addr
+pip # push the value of the instruction pointer
+push 9
+add # point to right after the jgz at the end of this macro
+push @_call_impl
+push 1
+jgz
+.endmacro
+
+.addmacro _call_impl # ( addr ret_addr -- ) pushes an address to return to on to the control stack and jumps to the address addr
 # push current IP
-pip # this is a new opcode: ( -- ip )  
+# pip # this is a new opcode: ( -- ip )  
                  # > addr [ip of here]
 # add an offset to account for the following code
-push 20 # should point to right after the end of this macro expansion 
+# push 20 # should point to right after the end of this macro expansion 
                  # > addr [ip of there] 11
-add              # > addr ret_addr 
+# add              # > addr ret_addr 
 # increment stack pointer
 push @_strlib_SP # > addr ret_addr SP_addr
 read             # > addr ret_addr SP_val

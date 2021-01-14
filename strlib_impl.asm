@@ -3,6 +3,10 @@ push @_strlib_init
 push 1
 jgz # jump over all the variables and impls to the init
 
+# --- call impl ---
+:_call_impl
+_call_impl   # so 'call_impl' is actually a macro, so we're just expanding it here at a specific address
+
 # control stack
 :_strlib_cs
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
