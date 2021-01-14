@@ -1,24 +1,24 @@
 # library to deal with strings
 
 .addmacro call # ( addr -- ) pushes an address to return to on to the control stack and jumps to the address addr
-# increment stack pointer
-push @_strlib_SP # > addr SP_addr
-read             # > addr SP_val
-push 1           # > addr SP_val 1
-add              # > addr SP_val+1
-push @_strlib_SP # > addr SP_val+1 SP_addr
-store            # > addr  # and the SP is now pointing at the next address in the control stack
 # push current IP
 pip # this is a new opcode: ( -- ip )  
                  # > addr [ip of here]
 # add an offset to account for the following code
-push 11 # should point to right after the end of this macro expansion 
+push 20 # should point to right after the end of this macro expansion 
                  # > addr [ip of there] 11
-add              # > addr there+11
-# copy it to where the stack pointer points
-push @_strlib_SP # > addr there+11 SP_addr
-read             # > addr there+11 SP_val
-store            # > addr  # and where SP points is there+10
+add              # > addr ret_addr 
+# increment stack pointer
+push @_strlib_SP # > addr ret_addr SP_addr
+read             # > addr ret_addr SP_val
+push 1           # > addr ret_addr SP_val 1
+add              # > addr ret_addr SP_val+1
+push @_strlib_SP # > addr ret_addr SP_val+1 SP_addr
+store            # > addr ret_addr  # and the SP is now pointing at the next address in the control stack
+# copy ret_addr to where the stack pointer points
+push @_strlib_SP # > addr ret_addr SP_addr
+read             # > addr ret_addr SP_val
+store            # > addr  # and where SP points is ret_addr
 # jump to addr
 push 1           # > addr 1
 jgz              # > (empty) # and we jump to addr
