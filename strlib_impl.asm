@@ -76,6 +76,26 @@ return
 # leftover = leftover / 10
 # if leftover is > 10 goto top
 # while not null, pop and emit
+# ### alternate algorithm https://wikiti.brandonw.net/index.php?title=Z80_Routines:Other:DispHL
+# param: value - the thing we're printing
+# base = -1000
+# call _reset_count
+# base = -100
+# call _reset_count
+# base = -10
+# call _reset_count
+# base = -1
+# :_reset_count
+# count = '0' - 1 (47 decimal)
+# :_loop
+# count = count + 1
+# value = value + base (note: base is negative so we're actually subtracting)
+# jump to loop if value is positive
+# value = value - base (note: base is negative so we're actually adding)
+# emit count (it should be ascii '0' through '9')
+# return (to get the next value of base, and then finally to return from our call into this subroutine)
+# ### a third algorithm from jonesforth https://github.com/nornagon/jonesforth/blob/4f853252f715132e7716cbd44e5306cefb6a6fec/jonesforth.f#L276-L320
+
 return
 
 # temp vars for putd
