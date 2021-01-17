@@ -66,41 +66,117 @@ return
 
 # --- putd impl ---
 :_strlib_putd
-# discussion: https://stackoverflow.com/questions/13166064/how-do-i-print-an-integer-in-assembly-level-programming-without-printf-from-the
-# TODO putd impl
-# push a null
-# leftover = val
-# :top
-# push leftover mod 10
-# offset by '0'
-# leftover = leftover / 10
-# if leftover is > 10 goto top
-# while not null, pop and emit
-# ### alternate algorithm https://wikiti.brandonw.net/index.php?title=Z80_Routines:Other:DispHL
-# param: value - the thing we're printing
-# base = -1000
-# call _reset_count
-# base = -100
-# call _reset_count
-# base = -10
-# call _reset_count
-# base = -1
-# :_reset_count
-# count = '0' - 1 (47 decimal)
-# :_loop
-# count = count + 1
-# value = value + base (note: base is negative so we're actually subtracting)
-# jump to loop if value is positive
-# value = value - base (note: base is negative so we're actually adding)
-# emit count (it should be ascii '0' through '9')
-# return (to get the next value of base, and then finally to return from our call into this subroutine)
-# ### a third algorithm from jonesforth https://github.com/nornagon/jonesforth/blob/4f853252f715132e7716cbd44e5306cefb6a6fec/jonesforth.f#L276-L320
+# ### algorithm inspiration: https://wikiti.brandonw.net/index.php?title=Z80_Routines:Other:DispHL
+# ( value -- )
+push @_putd_value
+store
 
+# advance decr_idx and set decr to what it points to
+:_putd_next_decr
+# increment the index
+push @_putd_decr_idx
+read
+push 1
+add
+push @_putd_decr_idx
+store
+
+# store the indexed value of the list into decr
+push @_putd_decr_list # > @decr_list
+push @_putd_decr_idx  # > @decr_list @decr_idx
+read            # > @decr_list 0
+add             # > @decr_list+0
+read            # > [0th item of decr list, 100]
+push @_putd_decr      # > 100 @decr
+store           # > (empty) # and decr is 100
+
+# if decr gt 0, we've got more in our list
+push @_putd_go
+push @_putd_decr
+read
+jgz
+# else we are done. jump to end
+push @_putd_end
+push 1
+jgz
+
+:_putd_go
+# init the character
+push 47 # > 47     # 48 is '0' 
+push @_putd_char # > 47 @char
+store   # > (empty)   # and char is 47
+
+:_putd_top
+# increment the character
+push @_putd_char # > @char
+read       # > 47
+push 1     # > 47 1
+add        # > 48
+push @_putd_char # > 48 @char
+store      # > (empty)    # and char is 48
+
+# decrement through our value
+push @_putd_value
+read       # > 4
+push @_putd_decr
+read
+sub        # > 3
+push @_putd_value # > 3 @value
+store      # > (empty) # and value is 3
+
+# we now need to jump to top if value is gte 0
+# jump if value is gt 0
+push @_putd_top  # > @top
+push @_putd_value # > @top @value
+read       # > @top value
+jgz        # > (empty)
+# value is either 0 or negative
+push @_putd_top
+push @_putd_value
+read
+push 1
+add   # if value was 0, then TOS is 1, else its 0 or below
+jgz
+
+# "undo" the last subtract of decr so value can be used again
+push @_putd_decr
+read
+push @_putd_value
+read
+add
+push @_putd_value
+store
+
+# emit the counter
+:_putd_do_emit
+push @_putd_char
+read
+emit
+
+# if decr is gt 0, jump to get next decr
+push @_putd_next_decr
+push @_putd_decr
+read
+jgz
+
+:_putd_end
 return
 
 # temp vars for putd
-:_strlib_putd_leftover
+:_putd_value # we slowly subtract out powers of the radix until this is 0
 0
+
+:_putd_char # the current character to print
+0
+
+:_putd_decr # the current radix power we're decrementing by
+0
+
+:_putd_decr_list # the powers of the radix we're using, zero terminated
+100 10 1 0
+
+:_putd_decr_idx # index to above list.
+-1
 
 :_strlib_init
 # init the control stack
