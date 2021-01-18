@@ -135,7 +135,6 @@ int main( int argc, char *argv[]) {
         advanceIP();
         break;
       case 0x01: // ( -- char ) read char from input and put on stack
-        //tcflush(STDIN_FILENO, TCIOFLUSH);
         ch = getchar();
         push(ch);
         advanceIP();
