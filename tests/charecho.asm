@@ -30,10 +30,6 @@ emit
 # so 80 - 80 = 0, now here
 #    81 - 80 = 1, jumped to end
 
-# debug
-push 46 # '.'
-emit
-
 # jump back to get another char
 push @getchar
 push 1

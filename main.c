@@ -96,14 +96,16 @@ void setupTerminal() {
   // largely from pforth pf_io_posix.c
   tcgetattr(STDIN_FILENO, &oldtio);
   tcgetattr(STDIN_FILENO, &newtio);
-  //newtio.c_lflag &= ~( ECHO | ECHONL | ECHOCTL | ICANON );
-  newtio.c_lflag &= ~( ICANON );
+  newtio.c_lflag &= ~( ECHO | ECHONL | ECHOCTL | ICANON );
   newtio.c_cc[VTIME] = 0;
   newtio.c_cc[VMIN] = 1;
-  //cfmakeraw(&newtio);
+  //cfmakeraw(&newtio); // use this instead of the three lines above if you want the VM to be able to output CR and LF independently
   if( tcsetattr(STDIN_FILENO, TCSANOW, &newtio) < 0 ) {
     printf("error setting terminal");
   }
+  // remove buffers from stdin & stdout 
+  setvbuf(stdin, NULL, _IONBF, 0);
+  setvbuf(stdout, NULL, _IONBF, 0);
 }
 
 void resetTerminal() {
@@ -133,10 +135,8 @@ int main( int argc, char *argv[]) {
         advanceIP();
         break;
       case 0x01: // ( -- char ) read char from input and put on stack
-        printf("[getchar()ing->");
-        tcflush(STDIN_FILENO, TCIOFLUSH);
+        //tcflush(STDIN_FILENO, TCIOFLUSH);
         ch = getchar();
-        printf("<-done]");
         push(ch);
         advanceIP();
         break;
