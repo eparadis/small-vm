@@ -69,3 +69,8 @@ push @_strlib_putd
 call
 .endmacro
 
+.addmacro gets # ( buf_addr buf_len term_char -- str_len ) copies characters from the input until buf_len-1 are copied or term_char is encountered. Null-terminates the input and returns the string length
+push @_strlib_gets_impl
+call
+.endmacro
+

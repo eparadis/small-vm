@@ -178,6 +178,44 @@ return
 :_putd_decr_idx # index to above list.
 -1
 
+
+# --- gets impl ---
+:_strlib_gets_impl
+# ( buf_addr buf_len term_char -- str_len )
+push @_gets_term
+store
+push @_gets_buf_len
+store
+push @_gets_buf_addr
+store
+
+# if str_len == buf_len - 1, stop getting chars
+:_gets_top
+
+# get a char and copy it to the buffer
+
+# if the char == terminating character, stop getting chars
+
+# increment string length
+
+# go back to top
+
+
+:_gets_input_done
+# add null terminator
+
+push 0
+return
+
+# working vars for gets
+:_gets_term
+0
+:_gets_buf_len
+0
+:_gets_buf_addr
+0
+
+
 :_strlib_init
 # init the control stack
 push @_strlib_cs
