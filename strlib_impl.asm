@@ -192,13 +192,15 @@ push @_gets_buf_addr
 store
 
 # if str_len == buf_len - 1, stop getting chars
-# if str_len - buf_len > 0, stop getting chars
+# if str_len - (buf_len-1) > 0, stop getting chars
 :_gets_top
 push @_gets_input_done
 push @_gets_str_len
 read
 push @_gets_buf_len
 read
+push 1
+sub
 sub
 jgz
 
@@ -256,8 +258,14 @@ jgz
 
 :_gets_input_done
 # add null terminator
-
 push 0
+push @_gets_buf_addr
+read
+store
+
+# retval of chars input
+push @_gets_str_len
+read
 return
 
 # working vars for gets
