@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#define MAXRAM 300
+#define MAXRAM 512 
 #define LINE_MAX 1023 
 
 int stack[100];
