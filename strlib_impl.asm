@@ -184,22 +184,75 @@ return
 # ( buf_addr buf_len term_char -- str_len )
 push @_gets_term
 store
+push 1
+sub # decrement buf_len to make room for null terminator
 push @_gets_buf_len
 store
 push @_gets_buf_addr
 store
 
 # if str_len == buf_len - 1, stop getting chars
+# if str_len - buf_len > 0, stop getting chars
 :_gets_top
+push @_gets_input_done
+push @_gets_str_len
+read
+push @_gets_buf_len
+read
+sub
+jgz
 
 # get a char and copy it to the buffer
+get
+push @_gets_buf_addr
+read
+store
 
 # if the char == terminating character, stop getting chars
+# TODO jeq # macro - jump if equal ( target val1 val2 -- )
+push @_gets_uneq
+push @_gets_buf_addr
+read
+read
+push @_gets_term
+read
+sub
+jgz # jump to uneq if char - term > 0
+push @_gets_uneq
+push @_gets_term
+read
+push @_gets_buf_addr
+read
+read
+sub
+jgz # jump to uneq if term - char > 0
 
-# increment string length
+# the difference must be 0, so they're equal
+push @_gets_input_done
+push 1
+jgz
+
+:_gets_uneq
+
+# increment string length & buf_addr
+push @_gets_str_len
+read
+push 1
+add
+push @_gets_str_len
+store
+
+push @_gets_buf_addr
+read
+push 1
+add
+push @_gets_buf_addr
+store
 
 # go back to top
-
+push @_gets_top
+push 1
+jgz
 
 :_gets_input_done
 # add null terminator
@@ -214,7 +267,8 @@ return
 0
 :_gets_buf_addr
 0
-
+:_gets_str_len
+0
 
 :_strlib_init
 # init the control stack
