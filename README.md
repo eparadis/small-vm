@@ -52,7 +52,7 @@ gcc -o macroprep macro.c
 
 # TODO
 - create a macro library of "missing" opcodes like various conditional jumps, ~call/return~, indirect memory addressing, etc. These would be good candidates for adding to the VM to improve code density.
-- create a macro library of terminal IO: ~printing strings~, inputting strings, ~printing number~, inputting numbers, print hex, etc
+- create a macro library of terminal IO: ~printing strings~, ~inputting strings~, ~printing number~, inputting numbers, print hex, etc
 - create a macro library of string operations useful for an interactive monitor: extracting tokens, splitting strings, searching strings, printing areas of memory, etc
 - improve the workflow when using macros that use other macros (will be almost all of them, most likely!)
 - write a small interactive monitor to run in the VM
