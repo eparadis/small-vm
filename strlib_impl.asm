@@ -278,6 +278,11 @@ return
 :_gets_str_len
 0
 
+# --- atoi impl ---
+:_strlib_atoi_impl # (str_addr -- value)
+# TODO atoi impl
+return
+
 :_strlib_init
 # init the control stack
 push @_strlib_cs

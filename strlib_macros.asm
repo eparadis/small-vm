@@ -74,3 +74,8 @@ push @_strlib_gets_impl
 call
 .endmacro
 
+.addmacro atoi # ( str_addr -- value ) converts a string to a decimal
+push @_strlib_atoi_impl
+call
+.endmacro
+
