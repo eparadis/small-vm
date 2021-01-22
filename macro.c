@@ -71,7 +71,7 @@ void createMacro( char *name) {
     return;
   }
   printf("# start of macro definition '%s'\n", name);
-  macro_names[storedMacros] = malloc(strlen(name));
+  macro_names[storedMacros] = malloc(strlen(name) + 1);
   if( macro_names[storedMacros] == NULL) {
     perror("could not allocate space for new macro name");
     exit(-1);
@@ -108,7 +108,7 @@ char *labels[LABELS_MAX];
 int locs[LABELS_MAX];
 int storedLabels = 0;
 void addLabel( char *label, int loc) {
-  labels[storedLabels] = malloc(strlen(label));
+  labels[storedLabels] = malloc(strlen(label) + 1);
   strcpy(labels[storedLabels], label);
   labels[storedLabels][0] = '@'; // make it easier do search later
   locs[storedLabels] = loc;
