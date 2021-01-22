@@ -128,8 +128,9 @@ int getAddress( char *label) {
     }
     i += 1;
   }
-  perror("label not found");
+  fprintf( stderr, "label %s not found\n", label);
   printf("# unfound label: %s\n", label);
+  exit(-1);
   return -999;
 }
 
