@@ -9,4 +9,5 @@ cat strlib_macros.asm strlib_impl.asm tests/gets_test.asm > $DIR/one
 cat strlib_macros.asm $DIR/two > $DIR/three
 ./baz $DIR/three > $DIR/four
 ./bar $DIR/four > $DIR/five
+echo "type some characters"
 ./foo $DIR/five
