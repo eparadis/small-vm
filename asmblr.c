@@ -9,7 +9,7 @@ char *labels[LABELS_MAX];
 int locs[LABELS_MAX];
 int storedLabels = 0;
 void addLabel( char *label, int loc) {
-  labels[storedLabels] = malloc(strlen(label));
+  labels[storedLabels] = malloc(strlen(label)+1);
   strcpy(labels[storedLabels], label);
   labels[storedLabels][0] = '@'; // make it easier do search later
   locs[storedLabels] = loc;
@@ -29,8 +29,12 @@ int getAddress( char *label) {
     }
     i += 1;
   }
-  perror("label not found");
+  fprintf( stderr, "label %s not found\nknown labels:\n", label );
+  for(i=0; i<storedLabels; i++) {
+    fprintf( stderr, "-->%s<--\n", labels[i]);
+  }
   printf("# unfound label: %s\n", label);
+  exit(-1);
   return -999;
 }
 
