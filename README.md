@@ -63,3 +63,14 @@ gcc -o macroprep macro.c
 - unify the macro processor with the assembler
 - remove the need for temporary files (make the assembler single-pass, make an in-memory representation of the object file that can be operated on non-linearly, assume everything is defined before it is needed and do a lazy/lazier calculation on addresses, or ... etc)
 - do a better job of preserving comments from one step to the next. Maybe this is a flag?
+
+# References
+
+Donovan, J. J. _Systems Programming_ 1972. McGraw-Hill. pp111-142 ([online at archive.org](https://archive.org/details/systemsprogrammi00don_xk6))
+
+Murdocca, Miles. _Principles of Computer Architecture_ 2000. p176. ([online at archive.org](https://archive.org/details/principlesofcomp0000murd/page/176/mode/2up))
+
+Tanenbaum _Structured Computer Organization_ 1976. sec 6.4.7 Implementation of a Macro Facility in an Assembler. ([online at archive.org](https://archive.org/details/structuredcomput0000tane_m8w5/page/326/mode/2up))
+
+
+
