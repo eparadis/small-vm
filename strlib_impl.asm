@@ -280,8 +280,91 @@ return
 
 # --- atoi impl ---
 :_strlib_atoi_impl # (str_addr -- value)
-# TODO atoi impl
+# store the string address
+push @_strlib_atoi_str_addr
+store
+
+# jump to done if string address points to a \0
+push @_strlib_atoi_top
+push @_strlib_atoi_str_addr
+read
+read
+jgz
+push @_strlib_atoi_done # it wasn't GT 0
+push 1
+jgz
+
+:_strlib_atoi_top
+# get the character the address points to
+push @_strlib_atoi_str_addr
+read
+read
+
+# subtract '0' from it
+push 48 # '0'
+sub
+
+# TODO bail out if we didn't get a value in range
+
+# add it to the result
+push @_strlib_atoi_result
+read
+add
+push @_strlib_atoi_result
+store
+
+# increment the pointer
+push @_strlib_atoi_str_addr
+read
+push 1
+add
+push @_strlib_atoi_str_addr
+store
+
+# jump to done if address points to a \0
+push @_strlib_atoi_over
+push @_strlib_atoi_str_addr
+read
+read
+jgz
+push @_strlib_atoi_done # it wasn't GT 0
+push 1
+jgz
+
+:_strlib_atoi_over
+# multiply result by 10 w/ an unrolled loop
+push @_strlib_atoi_result read # push result # > result
+push @_strlib_atoi_result read # push result # > result result
+add # > [2*result]
+push @_strlib_atoi_result store # store result # > (empty) # and result=2*result
+push @_strlib_atoi_result read # push result  # > [2*result]
+push @_strlib_atoi_result read # push result  # > [2*result] [2*result]
+push @_strlib_atoi_result read # push result  # > [2*result] [2*result] [2*result]
+add # > [2*result] [4*result]
+push @_strlib_atoi_result store # store result # > [2*result] # and result=4*result
+push @_strlib_atoi_result read # push result  # > [2*result] [4*result]
+push @_strlib_atoi_result read # push result  # > [2*result] [4*result] [4*result]
+add          # > [2*result] [8*result]
+add          # > [10*result]
+push @_strlib_atoi_result store # store result # > (empty) # and result=10*result
+
+# jump to top
+push @_strlib_atoi_top
+push 1
+jgz
+
+:_strlib_atoi_done
+# push the result
+push @_strlib_atoi_result
+read
 return
+
+# atoi temp variables
+:_strlib_atoi_str_addr
+0
+
+:_strlib_atoi_result
+0
 
 :_strlib_init
 # init the control stack
