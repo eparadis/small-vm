@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#define MAXRAM 512 
+#define MAXRAM 640
 #define LINE_MAX 1023 
 
 int stack[100];
@@ -117,6 +117,7 @@ int main( int argc, char *argv[]) {
   unsigned int retCode;
   char ch;
   int a, b, c;
+  // int i;
   if( argc < 2 ) {
     printf("usage:\n%s filename\n", argv[0]);
     return -1;
