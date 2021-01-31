@@ -1,4 +1,4 @@
-
+# exercise puts by printing a test message three times
 push @_test_message
 puts
 push @_test_message
@@ -6,24 +6,26 @@ puts
 push @_test_message
 puts
 
+# exercise putd by printing the number 234 (and then a newline)
 push 234
 putd
 push 10
 emit
 
+# exercise putd again with the number 432
 push 432
 putd
 push 10
 emit
 
-# convert a string to a number and print it out
+# convert a string "409" to a number and print it out
 push @_number_string
 atoi
 putd
 push 10
 emit
 
-
+# end of tests
 halt
 
 :_test_message
