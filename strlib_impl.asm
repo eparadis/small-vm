@@ -71,6 +71,17 @@ return
 push @_putd_value
 store
 
+# reset temp vars
+push 0
+push @_putd_char
+store
+push 0
+push @_putd_decr
+store
+push -1
+push @_putd_decr_idx
+store
+
 # advance decr_idx and set decr to what it points to
 :_putd_next_decr
 # increment the index
