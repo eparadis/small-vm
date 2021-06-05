@@ -79,3 +79,7 @@ push @_strlib_atoi_impl
 call
 .endmacro
 
+.addmacro getline # ( buf_addr -- str_len ) lke gets but echos input, assumes 255 char buffer, and a newline terminator
+push @_strlib_getline_impl
+call
+.endmacro

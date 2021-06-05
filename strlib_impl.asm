@@ -377,6 +377,26 @@ return
 :_strlib_atoi_result
 0
 
+:_strlib_getline_impl
+# TODO
+# read a character from input
+# if the character is a newline
+#  store a null into the buffer
+#  decrement the buffer size
+#  jump out of loop
+# otherwise
+# put read character in the buffer
+# echo the character
+# decrement buffer size
+# if any buffer remains, jump to top
+
+# subtract to find the string length and leave it TOS
+
+return
+
+# getline temp variables
+
+
 :_strlib_init
 # init the control stack
 push @_strlib_cs
