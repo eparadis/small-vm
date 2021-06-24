@@ -42,3 +42,21 @@ call
 push @_strlib_getline_impl
 call
 .endmacro
+
+.addmacro dup # ( x -- x x ) no... this isn't a primative for some reason...
+# > x
+push @_strlib_dup_temp # > x @tmp
+store # > (empty) # and tmp = x
+push @_strlib_dup_temp # > @tmp
+read # > x
+push @_strlib_dup_temp # > x @tmp
+read # > x x 
+.endmacro
+
+.addmacro jnz # ( addr cond - )
+pip
+
+jgz
+
+.endmacro
+
