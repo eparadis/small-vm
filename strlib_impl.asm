@@ -5,15 +5,7 @@ jgz # jump over all the variables and impls to the init
 
 # --- call impl ---
 :_call_impl
-
 # ( addr ret_addr -- ) pushes an address to return to on to the control stack and jumps to the address addr
-# push current IP
-# pip # this is a new opcode: ( -- ip )
-                 # > addr [ip of here]
-# add an offset to account for the following code
-# push 20 # should point to right after the end of this macro expansion
-                 # > addr [ip of there] 11
-# add              # > addr ret_addr
 # increment stack pointer
 push @_strlib_SP # > addr ret_addr SP_addr
 read             # > addr ret_addr SP_val
@@ -32,7 +24,6 @@ jgz              # > (empty) # and we jump to addr
 
 # --- return impl ---
 :_return_impl
-
 # ( -- ) pops the control stack and jumps to it
 # push whatever the stack pointer points to
 push @_strlib_SP # > SP_addr
@@ -52,7 +43,7 @@ jgz              # > (empty)   # and jump to the address of TOS
 
 # control stack
 :_strlib_cs
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 :_strlib_SP
 0
 
@@ -416,25 +407,70 @@ return
 :_strlib_atoi_result
 0
 
-:_strlib_getline_impl
-# TODO
+:_strlib_getline_impl # ( buffaddr - length ) gets chars, echos them, puts them in the buffer, until a newline 
+# store a pointer to the buffer
+push @_strlib_getline_headaddr
+store
+:_strlib_getline_top
 # read a character from input
+get
+push @_strlib_getline_input
+store
 # if the character is a newline
+push @_strlib_getline_continue
+push @_strlib_getline_input
+read
+push 10 # 10 is NL, 13 is CR
+sub
+jnz 
 #  store a null into the buffer
-#  decrement the buffer size
+push 0
+push @_strlib_getline_headaddr
+read
+store
+#  TODO decrement the buffer size
 #  jump out of loop
+push @_strlib_getline_end
+push 1
+jnz
 # otherwise
+:_strlib_getline_continue
 # put read character in the buffer
+push @_strlib_getline_input
+read
+push @_strlib_getline_headaddr
+# read
+store
 # echo the character
-# decrement buffer size
-# if any buffer remains, jump to top
+emit
+# increment buffer head
+push @_strlib_getline_headaddr
+read
+push 1
+add
+push @_strlib_getline_headaddr
+store
+# TODO if any buffer remains, jump to top
+push @_strlib_getline_top
+push 1
+jnz
 
-# subtract to find the string length and leave it TOS
+:_strlib_getline_end
+# TODO subtract to find the string length and leave it TOS
+push 0
 
 return
 
 # getline temp variables
+:_strlib_getline_headaddr
+0
 
+:_strlib_getline_input
+0
+
+# dup temp variables
+:_strlib_dup_temp
+0
 
 :_strlib_init
 # init the control stack
